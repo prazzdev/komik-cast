@@ -20,7 +20,7 @@ export default function Home({ datas }) {
   )
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   const { data } = await axios.get('https://komikcast.net/detective-conan-chapter-001/')
   const $ = cheerio.load(data)
   let datas = []
