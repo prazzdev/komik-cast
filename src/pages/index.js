@@ -3,7 +3,6 @@ import cheerio from "cheerio"
 import Image from "next/image"
 
 export default function Home({ datas }) {
-  console.log(datas)
   return (
     <>
       {datas.map((data, i) => {
@@ -11,11 +10,10 @@ export default function Home({ datas }) {
           <div className="flex flex-col justify-center items-center">
             <Image 
               className="border-2 border-gray-800"
-              key={i} src={data.imgUrl} height={300} width={400} />
+              key={i} src={data.imgUrl} height={300} width={400} alt={i} />
           </div>
         )
       })}
-      <p>hehehe</p>
     </>
   )
 }
@@ -31,7 +29,9 @@ export async function getServerSideProps() {
   })
 
   return {
-    props: { datas }
+    props: {
+      datas,
+    }
   }
 }
 
