@@ -2,15 +2,23 @@ import axios from "axios"
 import cheerio from "cheerio"
 import Image from "next/image"
 
-export default function Home({ datas }) {
+export default function Home({ result }) {
+  console.log(result)
+
   return (
     <>
-      {datas.map((data, i) => {
+    <form action="" method="post" className="flex flex-row ">
+      <input 
+        className="bg-gray-300 text-white w-full p-3" 
+        placeholder="masukkan episode" />
+        <button type="submit">Search</button>
+    </form>
+      {result.map((data, i) => {
         return (
           <div className="flex flex-col justify-center items-center">
             <Image 
               className="border-2 border-gray-800"
-              key={i} src={data.imgUrl} height={300} width={400} alt={i} />
+              key={i} src={data.url} height={300} width={400} alt={i} />
           </div>
         )
       })}
@@ -18,26 +26,12 @@ export default function Home({ datas }) {
   )
 }
 
-export async function getServerSideProps() {
-  const { data } = await axios.get('https://komikcast.net/detective-conan-chapter-001/')
-  const $ = cheerio.load(data)
-  let datas = []
-  $('#anjay_ini_id_kh > img').each(function(i, elem) {
-      datas[i] = {
-          imgUrl: $(this).attr('src')
-      }
-  })
 
-  return {
-    props: {
-      datas,
-    }
-  }
+export async function getServerSideProps({ req }) {
+  console.log(req.body)
+  const res = await fetch('http://prazzapis.user.cloudjkt01.com/conan?chapter=50')
+  const datas = await res.json()
+  let result = datas.data
+
+  return { props: { result } }
 }
-
-// export async function getServerSideProps() {
-//   const res = await fetch('http://localhost:8000/komik')
-//   const data = await res.json()
-
-//   return { props: data }
-// }
